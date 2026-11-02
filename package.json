@@ -1,0 +1,23 @@
+{
+  "name": "e2e-automation-exercise",
+  "version": "1.0.0",
+  "description": "Testing e-commerce flows on Automation Exercise using e2e",
+  "type": "module",
+  "scripts": {
+    "test": "e2e run",
+    "test:headed": "e2e run --headed"
+  },
+  "keywords": [
+    "e2e",
+    "testing",
+    "automation-exercise",
+    "ecommerce"
+  ],
+  "author": "Tingri Lohar Mohammed Mohsin",
+  "license": "MIT",
+  "devDependencies": {
+    "@e2e-dev/web": "^0.15.4",
+    "e2e": "^0.22.0",
+    "typescript": "^5.7.0"
+  }
+}
