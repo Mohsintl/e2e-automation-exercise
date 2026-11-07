@@ -45,4 +45,6 @@ jobs:
           name: smoke-report
           path: .e2e/
           if-no-files-found: warn
+          # .e2e/ is a dot folder, which upload-artifact skips by default.
+          include-hidden-files: true
           retention-days: 14

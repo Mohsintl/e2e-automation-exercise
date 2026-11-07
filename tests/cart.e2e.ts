@@ -5,7 +5,7 @@ test.describe('Shopping Cart', () => {
     await app.open('/');
     await screen.getByRole('link', { name: /cart/i }).tap();
 
-    await expect(screen.getByRole('link', { name: /shopping cart/i })).toBeVisible();
+    await expect(screen.getByText('Shopping Cart')).toBeVisible();
     await expect(screen.getByText(/cart is empty/i)).toBeVisible();
   });
 
@@ -13,15 +13,15 @@ test.describe('Shopping Cart', () => {
     await app.open('/products');
     await expect(screen.getByRole('heading', { name: /all products/i })).toBeVisible();
 
-    // Tap first add to cart button
-    await screen.getByRole('link', { name: /add to cart/i }).tap();
+    // "Add to cart" is an anchor without href, so it is text, not a link; each card repeats it in its hover overlay.
+    await screen.getByText('Add to cart').first().tap();
 
     // Verify modal appeared
     await expect(screen.getByRole('heading', { name: /added!/i })).toBeVisible();
 
     // Continue shopping and navigate to cart
     await screen.getByRole('button', { name: /continue shopping/i }).tap();
-    await screen.getByRole('link', { name: /cart/i }).tap();
+    await screen.getByRole('link', 'Cart').tap();
 
     await expect(screen.getByRole('table')).toBeVisible();
   });
