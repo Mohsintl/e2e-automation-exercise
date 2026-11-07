@@ -1,0 +1,50 @@
+name: Smoke
+
+# Fast check on every pull request: the tests tagged smoke.
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: smoke-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    name: Smoke (chromium)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Install Chromium
+        run: npx e2e-web install chromium --with-deps
+
+      - name: Run tests
+        run: npx e2e run --tag smoke --reporter list,junit
+
+      - name: Upload report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-report
+          path: .e2e/
+          if-no-files-found: warn
+          # .e2e/ is a dot folder, which upload-artifact skips by default.
+          include-hidden-files: true
+          retention-days: 14

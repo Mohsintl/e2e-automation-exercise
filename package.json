@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "test": "e2e run",
-    "test:headed": "e2e run --headed"
+    "test:smoke": "e2e run --tag smoke",
+    "test:headed": "e2e run --headed",
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [
     "e2e",
@@ -16,8 +18,8 @@
   "author": "Tingri Lohar Mohammed Mohsin",
   "license": "MIT",
   "devDependencies": {
-    "@e2e-dev/web": "^0.15.4",
-    "e2e": "^0.22.0",
+    "@e2e-dev/web": "^0.15.5",
+    "e2e": "^0.23.0",
     "typescript": "^5.7.0"
   }
 }

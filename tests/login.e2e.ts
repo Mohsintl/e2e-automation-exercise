@@ -1,7 +1,13 @@
-import { test, expect } from 'e2e';
+import { expect } from 'e2e';
+import { test } from '@e2e-dev/web';
+import { blockAds } from './support/block-ads.ts';
 
 test.describe('Login functionality', () => {
-  test('should navigate to login page', async ({ app, screen }) => {
+  test.beforeEach(async ({ browser }) => {
+    await blockAds(browser);
+  });
+
+  test('should navigate to login page', { tags: ['smoke'] }, async ({ app, screen }) => {
     await app.open('/');
     await screen.getByRole('link', { name: /signup \/ login/i }).tap();
 
@@ -9,17 +15,17 @@ test.describe('Login functionality', () => {
     await expect(screen.getByRole('heading', { name: /new user signup!/i })).toBeVisible();
   });
 
-  test('login with invalid credentials should show error', async ({ app, screen }) => {
+  test('login with invalid credentials should show error', { tags: ['smoke'] }, async ({ app, screen }) => {
     await app.open('/login');
 
-    const emailInput = screen.getByRole('textbox', { name: /email address/i });
+    const emailInput = screen.getByRole('textbox', 'Email Address').first();
     await emailInput.fill('invalid@test.com');
 
     // Fill password in login form
-    const passwordInput = screen.getByRole('textbox', { name: /password/i });
+    const passwordInput = screen.getByRole('textbox', 'Password');
     await passwordInput.fill('wrongpassword');
 
-    await screen.getByRole('button', { name: /^login$/i }).tap();
+    await screen.getByRole('button', 'Login').tap();
 
     await expect(screen.getByText(/your email or password is incorrect/i)).toBeVisible();
   });
