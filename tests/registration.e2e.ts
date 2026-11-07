@@ -1,6 +1,12 @@
-import { test, expect } from 'e2e';
+import { expect } from 'e2e';
+import { test } from '@e2e-dev/web';
+import { blockAds } from './support/block-ads.ts';
 
 test.describe('User Registration', () => {
+  test.beforeEach(async ({ browser }) => {
+    await blockAds(browser);
+  });
+
   test('should navigate to registration and submit signup details', async ({ app, screen }) => {
     await app.open('/login');
 

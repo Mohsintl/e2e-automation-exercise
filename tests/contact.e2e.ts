@@ -1,8 +1,12 @@
 import { expect } from 'e2e';
-// The web engine's `test` adds the `browser` fixture, used here for the native dialog.
 import { test } from '@e2e-dev/web';
+import { blockAds } from './support/block-ads.ts';
 
 test.describe('Contact Us Form', () => {
+  test.beforeEach(async ({ browser }) => {
+    await blockAds(browser);
+  });
+
   test('should submit contact form successfully', async ({ app, screen, browser }) => {
     await app.open('/contact_us');
     await expect(screen.getByRole('heading', { name: /get in touch/i })).toBeVisible();

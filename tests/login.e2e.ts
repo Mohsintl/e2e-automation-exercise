@@ -1,6 +1,12 @@
-import { test, expect } from 'e2e';
+import { expect } from 'e2e';
+import { test } from '@e2e-dev/web';
+import { blockAds } from './support/block-ads.ts';
 
 test.describe('Login functionality', () => {
+  test.beforeEach(async ({ browser }) => {
+    await blockAds(browser);
+  });
+
   test('should navigate to login page', { tags: ['smoke'] }, async ({ app, screen }) => {
     await app.open('/');
     await screen.getByRole('link', { name: /signup \/ login/i }).tap();

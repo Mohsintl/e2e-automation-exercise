@@ -1,6 +1,12 @@
-import { test, expect } from 'e2e';
+import { expect } from 'e2e';
+import { test } from '@e2e-dev/web';
+import { blockAds } from './support/block-ads.ts';
 
 test.describe('Brand Navigation', () => {
+  test.beforeEach(async ({ browser }) => {
+    await blockAds(browser);
+  });
+
   test('should display brands on products page', async ({ app, screen }) => {
     await app.open('/products');
     await expect(screen.getByRole('heading', { name: /brands/i })).toBeVisible();

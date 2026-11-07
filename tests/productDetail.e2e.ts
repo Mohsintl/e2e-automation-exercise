@@ -1,6 +1,12 @@
-import { test, expect } from 'e2e';
+import { expect } from 'e2e';
+import { test } from '@e2e-dev/web';
+import { blockAds } from './support/block-ads.ts';
 
 test.describe('Product Details', () => {
+  test.beforeEach(async ({ browser }) => {
+    await blockAds(browser);
+  });
+
   test('should view product details', async ({ app, screen }) => {
     await app.open('/product_details/1');
 
