@@ -1,7 +1,7 @@
 import { test, expect } from 'e2e';
 
 test.describe('Products functionality', () => {
-  test('should display all products', async ({ app, screen }) => {
+  test('should display all products', { tags: ['smoke'] }, async ({ app, screen }) => {
     await app.open('/');
     await screen.getByRole('link', { name: /products/i }).tap();
 
@@ -9,7 +9,7 @@ test.describe('Products functionality', () => {
     await expect(screen.getByText(/blue top/i)).toBeVisible();
   });
 
-  test('should search for a product', async ({ app, screen }) => {
+  test('should search for a product', { tags: ['smoke'] }, async ({ app, screen }) => {
     await app.open('/products');
     await expect(screen.getByRole('heading', { name: /all products/i })).toBeVisible();
 

@@ -1,7 +1,7 @@
 import { test, expect } from 'e2e';
 
 test.describe('Site Navigation', () => {
-  test('should navigate to all main sections', async ({ app, screen }) => {
+  test('should navigate to all main sections', { tags: ['smoke'] }, async ({ app, screen }) => {
     await app.open('/');
 
     await screen.getByRole('link', { name: /products/i }).tap();

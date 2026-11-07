@@ -9,7 +9,7 @@ test.describe('Shopping Cart', () => {
     await expect(screen.getByText(/cart is empty/i)).toBeVisible();
   });
 
-  test('should add product to cart', async ({ app, screen }) => {
+  test('should add product to cart', { tags: ['smoke'] }, async ({ app, screen }) => {
     await app.open('/products');
     await expect(screen.getByRole('heading', { name: /all products/i })).toBeVisible();
 

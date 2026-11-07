@@ -1,8 +1,11 @@
 # Testing Automation Exercise with e2e
 
+[![Smoke](https://github.com/Mohsintl/e2e-automation-exercise/actions/workflows/smoke.yml/badge.svg)](https://github.com/Mohsintl/e2e-automation-exercise/actions/workflows/smoke.yml)
+[![Regression](https://github.com/Mohsintl/e2e-automation-exercise/actions/workflows/regression.yml/badge.svg)](https://github.com/Mohsintl/e2e-automation-exercise/actions/workflows/regression.yml)
+
 This repository provides an automated end-to-end test suite for [Automation Exercise](https://automationexercise.com) using **[e2e](https://github.com/tester-army/e2e)** and `@e2e-dev/web`.
 
-It covers the full suite of user journeys corresponding to the Playwright test suite:
+It covers the same user journeys as the [Playwright suite](https://github.com/Mohsintl/automation-exercise-playwright), so the two frameworks can be compared side by side:
 
 ## Test Coverage
 
@@ -17,37 +20,50 @@ It covers the full suite of user journeys corresponding to the Playwright test s
 - **Contact Us (`tests/contact.e2e.ts`)**: Submitting customer feedback form with validation and returning home.
 - **Site Navigation (`tests/navigation.e2e.ts`)**: Section routing, Test Cases page, API testing page, and footer email newsletter subscription.
 
+### Smoke and regression
+
+- **Smoke**: 7 tests tagged `smoke` (home, login page and invalid login, product listing and search, add to cart, main navigation). They run on every pull request.
+- **Regression**: the whole suite, smoke tests included.
+
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js 20 or later
-- pnpm (or npm / yarn)
+- Node.js 24.8 or later (or 22.22.3 or later on Node 22)
+- npm
 
 ### Installation
 
 ```bash
-pnpm install
+npm ci
+npx e2e-web install chromium --with-deps
 ```
 
 ### Running Tests
 
-Run the full test suite in headless mode:
+| Command | Runs |
+| :--- | :--- |
+| `npm test` | The full suite, headless |
+| `npm run test:smoke` | Only the tests tagged `smoke` |
+| `npm run test:headed` | The full suite in a visible browser |
+| `npm run typecheck` | TypeScript check of the config and tests |
 
-```bash
-pnpm test
-```
+Each run writes its report, screenshots, and trace pages to `.e2e/`.
 
-Or run with a headed browser to watch interactions live:
+## CI
 
-```bash
-pnpm test:headed
-```
+- **Smoke** (`.github/workflows/smoke.yml`): every pull request to `main` typechecks, then runs the smoke tests on Chromium.
+- **Regression** (`.github/workflows/regression.yml`): the full suite on push to `main`, nightly at 02:47 UTC, by hand, and on a pull request that changes the workflow. The nightly run matters because the site changes without any commit here.
+- Both use read-only permissions, cancel a superseded run on the same branch, and upload `.e2e/` (report, JUnit XML, screenshots) as an artifact, also when tests fail. No secrets are needed.
+- `workers: 1` in `e2e.config.ts` keeps the load on the public site low. CI retries each failed test once (the e2e default).
 
 ## Project Structure
 
 ```
-├── e2e.config.ts          # e2e configuration with web engine
+├── .github/workflows/
+│   ├── smoke.yml          # smoke tests on every pull request
+│   └── regression.yml     # full suite on main and nightly
+├── e2e.config.ts          # one Chromium target on the web engine
 ├── tests/
 │   ├── brand.e2e.ts       # Brand filtering tests
 │   ├── cart.e2e.ts        # Cart interaction tests
