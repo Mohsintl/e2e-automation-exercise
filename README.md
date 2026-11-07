@@ -82,3 +82,4 @@ Each run writes its report, screenshots, and trace pages to `.e2e/`.
 ## License
 
 [MIT](./LICENSE)
+
